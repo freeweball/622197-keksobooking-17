@@ -1,7 +1,7 @@
 # Личный проект «Кексобукинг» [![Build status][travis-image]][travis-url]
 
 * Студент: [Александр Савостин](https://up.htmlacademy.ru/javascript/17/user/622197).
-* Наставник: `Неизвестно`.
+* Наставник: [Егор Король](https://htmlacademy.ru/profile/id501115).
 
 ---
 
