@@ -1,41 +1,38 @@
 'use strict';
 
-var minQuantity = 1;
-var maxQuantity = 8;
-var typeValue = ['palace', 'flat', 'house', 'bungalo'];
+var MAX_QUANTITY = 8;
+var TYPE_VALUE = ['palace', 'flat', 'house', 'bungalo'];
 
 var getRandomNumber = function (min, max) {
   var randomNumber = min + Math.random() * (max + 1 - min);
-  randomNumber = Math.floor(randomNumber);
-  return randomNumber;
-};
 
-var getRandomUrl = function (min, max) {
-  var url = 'img/avatars/user' + 0 + getRandomNumber(min, max) + '.png';
-  return url;
+  return Math.floor(randomNumber);
 };
 
 var getRandomValue = function (arr) {
   var randomValue = arr[Math.floor(Math.random() * arr.length)];
+
   return randomValue;
 };
 
-var getArrValue = function (amount) {
+var getPinData = function (amount) {
   var arrValues = [];
+
   for (var i = 0; i < amount; i++) {
     arrValues[i] = {
-      'author': {
-        'avatar': getRandomUrl(minQuantity, maxQuantity)
+      author: {
+        avatar: 'img/avatars/user0' + [i + 1] + '.png'
       },
-      'offer': {
-        'type': getRandomValue(typeValue)
+      offer: {
+        type: getRandomValue(TYPE_VALUE)
       },
-      'location': {
-        'x': getRandomNumber(0, 1200) + 'px',
-        'y': getRandomNumber(130, 630) + 'px'
+      location: {
+        x: getRandomNumber(50, 1150) + 'px',
+        y: getRandomNumber(130, 630) + 'px'
       }
     };
   }
+
   return arrValues;
 };
 
@@ -44,19 +41,26 @@ var pinTemplate = document.querySelector('#pin').content.querySelector('.map__pi
 
 var getPin = function (data) {
   var pinElement = pinTemplate.cloneNode(true);
+  var searchPicture = pinElement.querySelector('img');
+
   pinElement.style.left = data.location.x;
   pinElement.style.top = data.location.y;
-  pinElement.querySelector('img').src = data.author.avatar;
-  pinElement.querySelector('img').alt = data.offer.type;
+  searchPicture.src = data.author.avatar;
+  searchPicture.alt = data.offer.type;
+
   return pinElement;
 };
+var renderPins = function () {
+  var fragment = document.createDocumentFragment();
+  var pinContent = getPinData(MAX_QUANTITY);
 
-var fragment = document.createDocumentFragment();
-var pinContent = getArrValue(maxQuantity);
-for (var i = 0; i < maxQuantity; i++) {
-  fragment.appendChild(getPin(pinContent[i]));
-}
+  for (var i = 0; i < MAX_QUANTITY; i++) {
+    fragment.appendChild(getPin(pinContent[i]));
+  }
 
-pinList.appendChild(fragment);
+  pinList.appendChild(fragment);
+};
+
+renderPins();
 
 document.querySelector('.map').classList.remove('map--faded');
