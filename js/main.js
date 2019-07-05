@@ -2,6 +2,8 @@
 
 var MAX_QUANTITY = 8;
 var TYPE_VALUE = ['palace', 'flat', 'house', 'bungalo'];
+var PIN_SHIFT_X = 25;
+var PIN_SHIFT_Y = 70;
 
 var getRandomNumber = function (min, max) {
   var randomNumber = min + Math.random() * (max + 1 - min);
@@ -27,8 +29,8 @@ var getPinData = function (amount) {
         type: getRandomValue(TYPE_VALUE)
       },
       location: {
-        x: getRandomNumber(50, 1150) + 'px',
-        y: getRandomNumber(130, 630) + 'px'
+        x: getRandomNumber(130 - PIN_SHIFT_X, 1200 - PIN_SHIFT_X) + 'px',
+        y: getRandomNumber(130 - PIN_SHIFT_Y, 630 - PIN_SHIFT_Y) + 'px'
       }
     };
   }
