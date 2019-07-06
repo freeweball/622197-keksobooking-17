@@ -4,6 +4,8 @@ var MAX_QUANTITY = 8;
 var TYPE_VALUE = ['palace', 'flat', 'house', 'bungalo'];
 var PIN_SHIFT_X = 25;
 var PIN_SHIFT_Y = 70;
+// var MAP_PIN_SHIFT_X = 87;
+// var MAP_PIN_SHIFT_Y = 32.5;
 
 var getRandomNumber = function (min, max) {
   var randomNumber = min + Math.random() * (max + 1 - min);
@@ -30,7 +32,7 @@ var getPinData = function (amount) {
       },
       location: {
         x: getRandomNumber(130 - PIN_SHIFT_X, 1200 - PIN_SHIFT_X) + 'px',
-        y: getRandomNumber(130 - PIN_SHIFT_Y, 630 - PIN_SHIFT_Y) + 'px'
+        y: getRandomNumber(130 + PIN_SHIFT_Y, 630 + PIN_SHIFT_Y) + 'px'
       }
     };
   }
@@ -63,6 +65,44 @@ var renderPins = function () {
   pinList.appendChild(fragment);
 };
 
-renderPins();
+// Работа с формами.
+var searchForm = document.querySelector('.ad-form').querySelectorAll('fieldset');
+var advertMap = document.querySelector('.map');
+var advertForm = document.querySelector('.ad-form');
+var advertMapFilter = document.querySelector('.map__filters');
+var advertPin = document.querySelector('.map__pin--main');
+var mapPin = document.querySelector('.map__pin--main');
+var mapPinValue = document.querySelector('#address');
 
-document.querySelector('.map').classList.remove('map--faded');
+
+// // // Делает поля формы не активнымии.
+// // var deActivationFields = function () {
+// //   for (var i = 0; i < searchForm.length; i++) {
+// //     searchForm[i].setAttribute('disabled', 'true');
+// //   }
+// // };
+
+// deActivationFields();
+
+// Делает поля формы активными.
+var activationFields = function () {
+  for (var i = 0; i < searchForm.length; i++) {
+    searchForm[i].setAttribute('disabled', 'false');
+    advertMap.classList.remove('map--faded');
+    advertForm.classList.remove('ad-form--disabled');
+    advertMapFilter.classList.remove('map__filters--disabled');
+  }
+};
+
+advertPin.addEventListener('click', function () {
+  activationFields();
+  renderPins();
+  advertPin.setAttribute('disabled', 'true');
+});
+
+
+
+mapPin.addEventListener('mouseup', function () {
+  mapPinValue.value = '570, 375';
+});
+
