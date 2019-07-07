@@ -97,5 +97,5 @@ advertPin.addEventListener('click', function () {
 });
 
 advertPin.addEventListener('mouseup', function () {
-  mapPinValue.value = advertPinX + ', ' + advertPinY
+  mapPinValue.value = advertPinX + ', ' + advertPinY;
 });
