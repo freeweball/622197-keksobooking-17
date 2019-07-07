@@ -4,8 +4,12 @@ var MAX_QUANTITY = 8;
 var TYPE_VALUE = ['palace', 'flat', 'house', 'bungalo'];
 var PIN_SHIFT_X = 25;
 var PIN_SHIFT_Y = 70;
-// var MAP_PIN_SHIFT_X = 87;
-// var MAP_PIN_SHIFT_Y = 32.5;
+var Y_MIN = 130; //  "y": случайное число, координата y метки на карте от 130 до 630 условие в задании;
+var Y_MAX = 630; //  "y": случайное число, координата y метки на карте от 130 до 630 условие в задании;
+var X_MIN = 133; // Минимальный возможный размер ширины экрана;
+var X_MAX = document.querySelector('.map').getBoundingClientRect().width;
+var MAP_PIN_SHIFT_X = 87;
+var MAP_PIN_SHIFT_Y = 32.5;
 
 var getRandomNumber = function (min, max) {
   var randomNumber = min + Math.random() * (max + 1 - min);
@@ -31,8 +35,8 @@ var getPinData = function (amount) {
         type: getRandomValue(TYPE_VALUE)
       },
       location: {
-        x: getRandomNumber(130 - PIN_SHIFT_X, 1200 - PIN_SHIFT_X) + 'px',
-        y: getRandomNumber(130 + PIN_SHIFT_Y, 630 + PIN_SHIFT_Y) + 'px'
+        x: getRandomNumber(X_MIN - PIN_SHIFT_X, X_MAX - PIN_SHIFT_X) + 'px',
+        y: getRandomNumber(Y_MIN - PIN_SHIFT_Y, Y_MAX - PIN_SHIFT_Y) + 'px'
       }
     };
   }
@@ -71,26 +75,18 @@ var advertMap = document.querySelector('.map');
 var advertForm = document.querySelector('.ad-form');
 var advertMapFilter = document.querySelector('.map__filters');
 var advertPin = document.querySelector('.map__pin--main');
-var mapPin = document.querySelector('.map__pin--main');
+var advertPinX = advertPin.getBoundingClientRect().left - MAP_PIN_SHIFT_X;
+var advertPinY = advertPin.getBoundingClientRect().top - MAP_PIN_SHIFT_Y;
 var mapPinValue = document.querySelector('#address');
-
-
-// // // Делает поля формы не активнымии.
-// // var deActivationFields = function () {
-// //   for (var i = 0; i < searchForm.length; i++) {
-// //     searchForm[i].setAttribute('disabled', 'true');
-// //   }
-// // };
-
-// deActivationFields();
 
 // Делает поля формы активными.
 var activationFields = function () {
+  advertMap.classList.remove('map--faded');
+  advertForm.classList.remove('ad-form--disabled');
+  advertMapFilter.classList.remove('map__filters--disabled');
+
   for (var i = 0; i < searchForm.length; i++) {
     searchForm[i].setAttribute('disabled', 'false');
-    advertMap.classList.remove('map--faded');
-    advertForm.classList.remove('ad-form--disabled');
-    advertMapFilter.classList.remove('map__filters--disabled');
   }
 };
 
@@ -100,9 +96,6 @@ advertPin.addEventListener('click', function () {
   advertPin.setAttribute('disabled', 'true');
 });
 
-
-
-mapPin.addEventListener('mouseup', function () {
-  mapPinValue.value = '570, 375';
+advertPin.addEventListener('mouseup', function () {
+  mapPinValue.value = advertPinX + ', ' + advertPinY
 });
-
