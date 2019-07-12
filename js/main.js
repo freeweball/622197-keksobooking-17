@@ -4,9 +4,9 @@ var MAX_QUANTITY = 8;
 var TYPE_VALUE = ['palace', 'flat', 'house', 'bungalo'];
 var PIN_SHIFT_X = 25;
 var PIN_SHIFT_Y = 70;
-var Y_MIN = 130; //  "y": случайное число, координата y метки на карте от 130 до 630 условие в задании;
-var Y_MAX = 630; //  "y": случайное число, координата y метки на карте от 130 до 630 условие в задании;
-var X_MIN = 133; // Минимальный возможный размер ширины экрана;
+var Y_MIN = 130;
+var Y_MAX = 630;
+var X_MIN = 133;
 var X_MAX = document.querySelector('.map').getBoundingClientRect().width;
 var MAP_PIN_SHIFT_X = 87;
 var MAP_PIN_SHIFT_Y = 32.5;
@@ -69,7 +69,6 @@ var renderPins = function () {
   pinList.appendChild(fragment);
 };
 
-// Работа с формами.
 var searchForm = document.querySelector('.ad-form').querySelectorAll('fieldset');
 var advertMap = document.querySelector('.map');
 var advertForm = document.querySelector('.ad-form');
@@ -79,14 +78,13 @@ var advertPinX = advertPin.getBoundingClientRect().left - MAP_PIN_SHIFT_X;
 var advertPinY = advertPin.getBoundingClientRect().top - MAP_PIN_SHIFT_Y;
 var mapPinValue = document.querySelector('#address');
 
-// Делает поля формы активными.
 var activationFields = function () {
   advertMap.classList.remove('map--faded');
   advertForm.classList.remove('ad-form--disabled');
   advertMapFilter.classList.remove('map__filters--disabled');
 
   for (var i = 0; i < searchForm.length; i++) {
-    searchForm[i].setAttribute('disabled', 'false');
+    searchForm[i].removeAttribute('disabled');
   }
 };
 
@@ -99,3 +97,40 @@ advertPin.addEventListener('click', function () {
 advertPin.addEventListener('mouseup', function () {
   mapPinValue.value = advertPinX + ', ' + advertPinY;
 });
+
+var minPrice = document.querySelector('#price');
+var timeIn = document.querySelector('#timein');
+var timeOut = document.querySelector('#timeout');
+var adForm = document.querySelector('.ad-form');
+var adFormType = document.querySelector('#type');
+
+var adMinValue = {
+  'bungalo': 0,
+  'flat': 1000,
+  'house': 5000,
+  'palace': 10000
+};
+
+var formTypePriceChange = function () {
+  var selectedValue = adFormType.value;
+  var minValue = adMinValue[selectedValue];
+
+  minPrice.min = minValue;
+  minPrice.placeholder = minValue.toString();
+};
+
+var changeValue = function (current, chengeable) {
+  chengeable.value = current.value;
+};
+
+var timeOutChangeHandler = function () {
+  changeValue(timeOut, timeIn);
+};
+
+var timeIntChangeHandler = function () {
+  changeValue(timeIn, timeOut);
+};
+
+adForm.addEventListener('change', formTypePriceChange);
+timeIn.addEventListener('change', timeIntChangeHandler);
+timeOut.addEventListener('change', timeOutChangeHandler);
