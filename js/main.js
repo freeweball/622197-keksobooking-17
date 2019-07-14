@@ -88,11 +88,11 @@ var activationFields = function () {
   }
 };
 
-advertPin.addEventListener('click', function () {
-  activationFields();
-  renderPins();
-  advertPin.setAttribute('disabled', 'true');
-});
+// advertPin.addEventListener('click', function () {
+//   activationFields();
+//   renderPins();
+//   // advertPin.setAttribute('disabled', 'true');
+// });
 
 advertPin.addEventListener('mouseup', function () {
   mapPinValue.value = advertPinX + ', ' + advertPinY;
@@ -134,3 +134,39 @@ var timeIntChangeHandler = function () {
 adForm.addEventListener('change', formTypePriceChange);
 timeIn.addEventListener('change', timeIntChangeHandler);
 timeOut.addEventListener('change', timeOutChangeHandler);
+
+// Перетаскивание пина
+// advertPin.addEventListener('mousedown');
+
+advertPin.addEventListener('mousedown', function (evt) {
+  var startCoords = {
+    x: evt.clientX,
+    y: evt.clientY
+  };
+
+  var onMouseMove = function (moveEvt) {
+    var shift = {
+      x: startCoords.x - moveEvt.clientX,
+      y: startCoords.y - moveEvt.clientY
+    };
+
+    startCoords = {
+      x: moveEvt.clientX,
+      y: moveEvt.clientY
+    };
+
+    advertPin.style.position = 'absolute';
+    advertPin.style.top = (advertPin.offsetTop - shift.y) + 'px';
+    advertPin.style.left = (advertPin.offsetLeft - shift.x) + 'px';
+  };
+
+  var onMouseUp = function (upEvt) {
+    document.removeEventListener('mousemove', onMouseMove);
+    document.removeEventListener('mouseup', onMouseUp);
+    activationFields();
+    renderPins();
+  };
+
+  document.addEventListener('mousemove', onMouseMove);
+  document.addEventListener('mouseup', onMouseUp);
+});
