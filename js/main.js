@@ -6,10 +6,11 @@ var PIN_SHIFT_X = 25;
 var PIN_SHIFT_Y = 70;
 var Y_MIN = 130;
 var Y_MAX = 630;
-var X_MIN = 133;
-var X_MAX = document.querySelector('.map').getBoundingClientRect().width;
-var MAP_PIN_SHIFT_X = 87;
-var MAP_PIN_SHIFT_Y = 32.5;
+var X_MIN = 25;
+var PIN_WIDTH = 65;
+var X_MAX = document.querySelector('.map').getBoundingClientRect().width - PIN_WIDTH;
+// var MAP_PIN_SHIFT_X = 87;
+// var MAP_PIN_SHIFT_Y = 32.5;
 
 var getRandomNumber = function (min, max) {
   var randomNumber = min + Math.random() * (max + 1 - min);
@@ -35,7 +36,7 @@ var getPinData = function (amount) {
         type: getRandomValue(TYPE_VALUE)
       },
       location: {
-        x: getRandomNumber(X_MIN - PIN_SHIFT_X, X_MAX - PIN_SHIFT_X) + 'px',
+        x: getRandomNumber(X_MIN - PIN_SHIFT_X, X_MAX) + 'px',
         y: getRandomNumber(Y_MIN - PIN_SHIFT_Y, Y_MAX - PIN_SHIFT_Y) + 'px'
       }
     };
@@ -74,8 +75,8 @@ var advertMap = document.querySelector('.map');
 var advertForm = document.querySelector('.ad-form');
 var advertMapFilter = document.querySelector('.map__filters');
 var advertPin = document.querySelector('.map__pin--main');
-var advertPinX = advertPin.getBoundingClientRect().left - MAP_PIN_SHIFT_X;
-var advertPinY = advertPin.getBoundingClientRect().top - MAP_PIN_SHIFT_Y;
+// var advertPinX = advertPin.getBoundingClientRect().left - MAP_PIN_SHIFT_X;
+// var advertPinY = advertPin.getBoundingClientRect().top - MAP_PIN_SHIFT_Y;
 var mapPinValue = document.querySelector('#address');
 
 var activationFields = function () {
@@ -87,16 +88,6 @@ var activationFields = function () {
     searchForm[i].removeAttribute('disabled');
   }
 };
-
-// advertPin.addEventListener('click', function () {
-//   activationFields();
-//   renderPins();
-//   // advertPin.setAttribute('disabled', 'true');
-// });
-
-advertPin.addEventListener('mouseup', function () {
-  mapPinValue.value = advertPinX + ', ' + advertPinY;
-});
 
 var minPrice = document.querySelector('#price');
 var timeIn = document.querySelector('#timein');
@@ -135,8 +126,7 @@ adForm.addEventListener('change', formTypePriceChange);
 timeIn.addEventListener('change', timeIntChangeHandler);
 timeOut.addEventListener('change', timeOutChangeHandler);
 
-// Перетаскивание пина
-// advertPin.addEventListener('mousedown');
+var dragged = false;
 
 advertPin.addEventListener('mousedown', function (evt) {
   var startCoords = {
@@ -155,16 +145,29 @@ advertPin.addEventListener('mousedown', function (evt) {
       y: moveEvt.clientY
     };
 
+    var pinTopPosition = (advertPin.offsetTop - shift.y);
+    var pinLeftPosition = (advertPin.offsetLeft - shift.x);
+
     advertPin.style.position = 'absolute';
-    advertPin.style.top = (advertPin.offsetTop - shift.y) + 'px';
-    advertPin.style.left = (advertPin.offsetLeft - shift.x) + 'px';
+
+    if (pinTopPosition >= Y_MIN - PIN_SHIFT_Y && pinTopPosition <= Y_MAX - PIN_SHIFT_Y && pinLeftPosition >= X_MIN - PIN_SHIFT_X && pinLeftPosition <= X_MAX) {
+      advertPin.style.top = pinTopPosition + 'px';
+      advertPin.style.left = pinLeftPosition + 'px';
+
+      mapPinValue.value = pinLeftPosition + ', ' + pinTopPosition;
+    }
   };
 
-  var onMouseUp = function (upEvt) {
+  var onMouseUp = function () {
     document.removeEventListener('mousemove', onMouseMove);
+    if (!dragged) {
+      activationFields();
+      renderPins();
+    }
+
+    dragged = true;
+
     document.removeEventListener('mouseup', onMouseUp);
-    activationFields();
-    renderPins();
   };
 
   document.addEventListener('mousemove', onMouseMove);
