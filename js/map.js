@@ -53,7 +53,7 @@
       document.removeEventListener('mousemove', onMouseMove);
       if (!dragged) {
         window.form.activationFields();
-        window.pin.renderPins();
+        window.pin();
       }
 
       dragged = true;
