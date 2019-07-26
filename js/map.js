@@ -13,7 +13,7 @@
   var X_MAX = document.querySelector('.map').getBoundingClientRect().width - PIN_WIDTH;
   var PIN_SHIFT_X = 25;
   var PIN_SHIFT_Y = 70;
-  var dragged = false;
+  window.dragged = false;
 
   adForm.addEventListener('change', window.util.formTypePriceChange);
   timeIn.addEventListener('change', window.util.timeIntChangeHandler);
@@ -51,12 +51,12 @@
 
     var onMouseUp = function () {
       document.removeEventListener('mousemove', onMouseMove);
-      if (!dragged) {
+      if (!window.dragged) {
         window.form.activationFields();
-        window.pin();
+        window.renderPin(window.dataPin);
       }
 
-      dragged = true;
+      window.dragged = true;
 
       document.removeEventListener('mouseup', onMouseUp);
     };

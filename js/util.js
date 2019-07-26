@@ -12,18 +12,6 @@
     'palace': 10000
   };
 
-  var getRandomNumber = function (min, max) {
-    var randomNumber = min + Math.random() * (max + 1 - min);
-
-    return Math.floor(randomNumber);
-  };
-
-  var getRandomValue = function (arr) {
-    var randomValue = arr[Math.floor(Math.random() * arr.length)];
-
-    return randomValue;
-  };
-
   var changeValue = function (current, chengeable) {
     chengeable.value = current.value;
   };
@@ -45,8 +33,6 @@
   };
 
   window.util = {
-    getRandomNumber: getRandomNumber,
-    getRandomValue: getRandomValue,
     changeValue: changeValue,
     timeOutChangeHandler: timeOutChangeHandler,
     timeIntChangeHandler: timeIntChangeHandler,
