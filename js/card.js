@@ -9,8 +9,8 @@
     'bungalo': 'Бунгало'
   };
 
-  var renderAdFeatures = function (data, featuresNode) {
-    var currentFeatures = data.offer.features;
+  var renderAdFeatures = function (dataFeatures, featuresNode) {
+    var currentFeatures = dataFeatures.offer.features;
     var featuresArray = [].slice.call(featuresNode.children);
 
     featuresArray.forEach(function (item, index) {
@@ -22,8 +22,8 @@
     });
   };
 
-  var renderAdPhotos = function (data, photosNode) {
-    var currentPhotos = data.offer.photos;
+  var renderAdPhotos = function (dataPhoto, photosNode) {
+    var currentPhotos = dataPhoto.offer.photos;
     var currentAdPhoto = photosNode.children[0];
     var photosFragment = document.createDocumentFragment();
 
@@ -55,14 +55,14 @@
 
     var adCardFeatures = adCard.querySelector('.popup__features');
     if (data.offer.features.length) {
-      renderAdFeatures(window.dataPin[1], adCardFeatures);
+      renderAdFeatures(data, adCardFeatures);
     } else {
       adCard.removeChild(adCardFeatures);
     }
 
     var adCardPhotos = adCard.querySelector('.popup__photos');
     if (data.offer.photos.length) {
-      renderAdPhotos(window.dataPin[1], adCardPhotos);
+      renderAdPhotos(data, adCardPhotos);
     } else {
       adCard.removeChild(adCardPhotos);
     }
@@ -70,19 +70,52 @@
     return adCard;
   };
 
-  var renderCard = function () {
+  var renderCard = function (dataCard) {
     var cardList = document.querySelector('.map__pins');
     var fragment = document.createDocumentFragment();
 
-    fragment.appendChild(getCard(window.dataPin[1]));
+    fragment.appendChild(getCard(dataCard));
     cardList.appendChild(fragment);
   };
 
-  var pinButton = document.querySelector('.map__pins');
+  var pinField = document.querySelector('.map__pins');
+  var pinButton = pinField.querySelector('.map__pin');
 
-  pinButton.addEventListener('click', function (evt) {
-    if (evt.target.type === 'button') {
-      renderCard();
+  pinField.addEventListener('click', function (evt) {
+    var target = evt.target;
+    var FilterImage = evt.target.getAttribute('src');
+    var cardData = window.dataPin.slice();
+    var filterImage;
+    var pinActive = document.querySelector('.map__pin--active');
+
+    if (target.parentElement.type === 'button' && target.parentElement.className === 'map__pin') {
+      filterImage = evt.target.getAttribute('src');
+      var cardData = window.dataPin.slice();
+      var dataFilter = cardData.filter(function (it) {
+          return it.author.avatar === filterImage;
+      });
+
+      renderCard(dataFilter[0]);
+      console.log(evt);
+      target.parentElement.classList.add('map__pin--active');
     }
-  });
+    if (target.className === 'map__pin' && target.type === 'button') {
+      filterImage = evt.target.firstElementChild.getAttribute('src');
+      var cardData = window.dataPin.slice();
+      var dataFilter = cardData.filter(function (it) {
+        return it.author.avatar === filterImage;
+      });
+
+      renderCard(dataFilter[0]);
+      target.child.classList.add('map__pin--active');
+      console.log(evt)
+    }
+
+    if (target.className === 'popup__close') {
+      var cardPopup = document.querySelector('.popup');
+      pinField.removeChild(cardPopup);
+      pinActive.classList.remove('map__pin--active');
+    }
+    });
+
 })();
