@@ -70,10 +70,9 @@
   window.deletePin = function () {
     var pinList = document.querySelector('.map__pins');
     var pinItem = document.querySelectorAll('.map__pin');
-    var pinItemMain = document.querySelector('.map__pin--main');
 
     for (var i = 1; i < pinItem.length; i++) {
-        pinList.removeChild(pinItem[i])
+      pinList.removeChild(pinItem[i]);
     }
   };
 
