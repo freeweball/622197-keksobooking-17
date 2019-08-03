@@ -9,7 +9,7 @@
     'bungalo': 'Бунгало'
   };
   var pinField = document.querySelector('.map__pins');
-
+  window.popupFlag = false;
 
   var renderAdFeatures = function (dataFeatures, featuresNode) {
     var currentFeatures = dataFeatures.offer.features;
@@ -83,6 +83,7 @@
   var openPopup = function (evt, filter) {
     evt.classList.add('map__pin--active');
     renderCard(filter[0]);
+    window.popupFlag = true;
   };
 
   var openNewPopup = function (data, event) {
@@ -94,12 +95,13 @@
     event.classList.add('map__pin--active');
   };
 
-  var closePopup = function () {
+  window.closePopup = function () {
     var cardPopup = document.querySelector('.popup');
     var pinActive = document.querySelector('.map__pin--active');
 
     pinField.removeChild(cardPopup);
     pinActive.classList.remove('map__pin--active');
+    window.popupFlag = true;
   };
 
   pinField.addEventListener('click', function (evt) {
@@ -138,7 +140,7 @@
     }
 
     if (target.className === 'popup__close') {
-      closePopup();
+      window.closePopup();
     }
   });
 
@@ -146,7 +148,7 @@
     var ESC_KEYCODE = 27;
 
     if (evt.keyCode === ESC_KEYCODE) {
-      closePopup();
+      window.closePopup();
     }
   });
 })();

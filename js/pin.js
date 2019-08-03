@@ -67,6 +67,16 @@
     pinList.appendChild(fragment);
   };
 
+  window.deletePin = function () {
+    var pinList = document.querySelector('.map__pins');
+    var pinItem = document.querySelectorAll('.map__pin');
+    var pinItemMain = document.querySelector('.map__pin--main');
+
+    for (var i = 1; i < pinItem.length; i++) {
+        pinList.removeChild(pinItem[i])
+    }
+  };
+
   var errorHandler = function () {
     var templateError = document.querySelector('#error').content.querySelector('.error');
     var tagMain = document.querySelector('main');

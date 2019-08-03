@@ -25,6 +25,12 @@
       y: evt.clientY
     };
 
+    window.startCoordPinMain = {
+      x: advertPin.style.left,
+      y: advertPin.style.top
+    };
+
+
     var onMouseMove = function (moveEvt) {
       var shift = {
         x: startCoords.x - moveEvt.clientX,

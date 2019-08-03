@@ -5,14 +5,17 @@
   var advertMap = document.querySelector('.map');
   var advertForm = document.querySelector('.ad-form');
   var advertMapFilter = document.querySelector('.map__filters');
+  var pageMain = document.querySelector('main');
+  var formOptionRooms = advertForm.querySelector('#room_number');
+  var formOptionGuest = advertForm.querySelector('#capacity');
+  var form = document.querySelector('.ad-form');
+  var pinItemMain = document.querySelector('.map__pin--main');
   var adCapacityMap = {
     '1': [1],
     '2': [1, 2],
     '3': [1, 2, 3],
     '100': [0]
   };
-  var adForm = document.querySelector('.ad-form');
-  var pageMain = document.querySelector('main');
 
   var activationFields = function () {
     advertMap.classList.remove('map--faded');
@@ -24,8 +27,15 @@
     }
   };
 
-  var formOptionRooms = advertForm.querySelector('#room_number');
-  var formOptionGuest = advertForm.querySelector('#capacity');
+  var deActivationFields = function () {
+    advertMap.classList.add('map--faded');
+    advertForm.classList.add('ad-form--disabled');
+    advertMapFilter.classList.add('map__filters--disabled');
+
+    for (var i = 0; i < searchForm.length; i++) {
+      searchForm[i].setAttribute('disabled', 'disabled');
+    }
+  };
 
   var onInputGuestChange = function (room, guest) {
     var selectedGuestsOptions = guest.children;
@@ -60,8 +70,40 @@
     pageMain.appendChild(fragment);
   };
 
-  adForm.addEventListener('submit', adFormSubmit);
-  adForm.addEventListener('invalid', adFormInvalid);
+  var closeMessageSuccess = function () {
+    var messageSuccess = document.querySelector('.success');
+
+    pageMain.removeChild(messageSuccess);
+  };
+
+  advertForm.addEventListener('submit', adFormSubmit);
+
+  advertForm.addEventListener('submit', function (evt) {
+    window.upload(new FormData(form), function () {});
+    evt.preventDefault();
+    form.reset();
+    if (window.popupFlag) {
+      window.closePopup();
+    }
+    window.deletePin();
+    deActivationFields();
+    pinItemMain.style.left = window.startCoordPinMain.x;
+    pinItemMain.style.top = window.startCoordPinMain.y;
+    window.dragged = false;
+  });
+
+  advertForm.addEventListener('invalid', adFormInvalid);
+  pageMain.addEventListener('click', function () {
+    closeMessageSuccess();
+  });
+
+  document.addEventListener('keydown', function (evt) {
+    var ESC_KEYCODE = 27;
+
+    if (evt.keyCode === ESC_KEYCODE) {
+      closeMessageSuccess();
+    }
+  });
 
   window.form = {
     activationFields: activationFields
