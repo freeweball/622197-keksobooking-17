@@ -100,7 +100,11 @@
     var pinActive = document.querySelector('.map__pin--active');
 
     pinField.removeChild(cardPopup);
-    pinActive.classList.remove('map__pin--active');
+
+    if (document.querySelector('.map__pin--active')) {
+      pinActive.classList.remove('map__pin--active');
+    }
+
     window.popupFlag = true;
   };
 

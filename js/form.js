@@ -94,7 +94,9 @@
 
   advertForm.addEventListener('invalid', adFormInvalid);
   pageMain.addEventListener('click', function () {
-    closeMessageSuccess();
+    if (document.querySelector('.success')) {
+      closeMessageSuccess();
+    }
   });
 
   document.addEventListener('keydown', function (evt) {

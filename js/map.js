@@ -30,7 +30,6 @@
       y: advertPin.style.top
     };
 
-
     var onMouseMove = function (moveEvt) {
       var shift = {
         x: startCoords.x - moveEvt.clientX,
