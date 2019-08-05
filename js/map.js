@@ -1,18 +1,18 @@
 'use strict';
 
 (function () {
-  var adForm = document.querySelector('.ad-form');
-  var timeIn = document.querySelector('#timein');
-  var timeOut = document.querySelector('#timeout');
-  var advertPin = document.querySelector('.map__pin--main');
-  var mapPinValue = document.querySelector('#address');
   var PIN_WIDTH = 65;
   var Y_MIN = 130;
   var Y_MAX = 630;
   var X_MIN = 25;
   var X_MAX = document.querySelector('.map').getBoundingClientRect().width - PIN_WIDTH;
   var PIN_SHIFT_X = 25;
-  var PIN_SHIFT_Y = 70;
+  var adForm = document.querySelector('.ad-form');
+  var timeIn = document.querySelector('#timein');
+  var timeOut = document.querySelector('#timeout');
+  var advertPin = document.querySelector('.map__pin--main');
+  var mapPinValue = document.querySelector('#address');
+
   window.dragged = false;
 
   adForm.addEventListener('change', window.util.formTypePriceChange);
@@ -46,10 +46,9 @@
 
       advertPin.style.position = 'absolute';
 
-      if (pinTopPosition >= Y_MIN - PIN_SHIFT_Y && pinTopPosition <= Y_MAX - PIN_SHIFT_Y && pinLeftPosition >= X_MIN - PIN_SHIFT_X && pinLeftPosition <= X_MAX) {
+      if (pinTopPosition >= Y_MIN && pinTopPosition <= Y_MAX && pinLeftPosition >= X_MIN - PIN_SHIFT_X && pinLeftPosition <= X_MAX) {
         advertPin.style.top = pinTopPosition + 'px';
         advertPin.style.left = pinLeftPosition + 'px';
-
         mapPinValue.value = pinLeftPosition + ', ' + pinTopPosition;
       }
     };

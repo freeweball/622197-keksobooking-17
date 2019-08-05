@@ -1,7 +1,7 @@
 'use strict';
 
 (function () {
-
+  var ESC_KEYCODE = 27;
   var typesMap = {
     'palace': 'Дворец',
     'flat': 'Квартира',
@@ -40,6 +40,19 @@
     currentAdPhoto.remove();
   };
 
+  var renderAdAvatar = function (dataPhoto, photosNode) {
+    var photoAdress = dataPhoto.author.avatar;
+    var photosFragment = document.createDocumentFragment();
+
+    var photoAd = photosNode.cloneNode(true);
+
+    photoAd.src = photoAdress;
+    photosFragment.appendChild(photoAd);
+
+    photosNode.appendChild(photosFragment);
+    photoAd.remove();
+  };
+
   var getCard = function (data) {
     var cardBlock = document.querySelector('#card').content.querySelector('.map__card');
     var adCard = cardBlock.cloneNode(true);
@@ -53,7 +66,14 @@
     adCard.querySelector('.popup__text--time').textContent = 'Заезд после ' + data.offer.checkin
     + ', выезд до' + data.offer.checkout;
     adCard.querySelector('.popup__description').textContent = data.offer.description;
-    adCard.querySelector('.popup__avatar').src = data.author.avatar;
+
+    var avatar = adCard.querySelector('.popup__avatar');
+
+    if (data.author) {
+      renderAdAvatar(data, avatar);
+    } else {
+      adCard.removeChild(avatar);
+    }
 
     var adCardFeatures = adCard.querySelector('.popup__features');
     if (data.offer.features.length) {
@@ -99,7 +119,10 @@
     var cardPopup = document.querySelector('.popup');
     var pinActive = document.querySelector('.map__pin--active');
 
-    pinField.removeChild(cardPopup);
+    if (document.querySelector('.popup')) {
+      pinField.removeChild(cardPopup);
+    }
+
 
     if (document.querySelector('.map__pin--active')) {
       pinActive.classList.remove('map__pin--active');
@@ -116,8 +139,8 @@
 
     if (target.parentElement.type === 'button' && target.parentElement.className === 'map__pin') {
       filterImage = evt.target.getAttribute('src');
-      var dataFilter = cardData.filter(function (it) {
-        return it.author.avatar === filterImage;
+      var dataFilter = cardData.filter(function (item) {
+        return item.author.avatar === filterImage;
       });
 
       if (!pinActive) {
@@ -130,8 +153,8 @@
     if (target.className === 'map__pin' && target.type === 'button') {
       filterImage = evt.target.firstElementChild.getAttribute('src');
 
-      dataFilter = cardData.filter(function (it) {
-        return it.author.avatar === filterImage;
+      dataFilter = cardData.filter(function (item) {
+        return item.author.avatar === filterImage;
       });
 
       if (!pinActive) {
@@ -148,9 +171,7 @@
     }
   });
 
-  pinField.addEventListener('keydown', function (evt) {
-    var ESC_KEYCODE = 27;
-
+  document.addEventListener('keydown', function (evt) {
     if (evt.keyCode === ESC_KEYCODE) {
       window.closePopup();
     }

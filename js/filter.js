@@ -1,5 +1,6 @@
 'use strict';
 (function () {
+  var DEBOUNCE_INTERVAL = 500;
   var mapFilters = document.querySelector('.map__filters');
   var housingTypeSelect = document.querySelector('#housing-type');
   var housingPriceSelect = document.querySelector('#housing-price');
@@ -7,16 +8,15 @@
   var housingGuestsSelect = document.querySelector('#housing-guests');
   var housingFeatures = document.querySelector('#housing-features');
   var lastTimeout;
-  var DEBOUNCE_INTERVAL = 500;
 
   var onChangeFilterAll = function () {
     window.deletePin();
 
-    var filteredPins = window.dataPin.filter(function (it) {
+    var filteredPins = window.dataPin.filter(function (item) {
       if (document.querySelector('.popup')) {
         window.closePopup();
       }
-      return filterHousingType(it) && filterHousingPrice(it) && filterHousingRooms(it) && filterHousingGuests(it) && filterFeatures(it);
+      return filterHousingType(item) && filterHousingPrice(item) && filterHousingRooms(item) && filterHousingGuests(item) && filterFeatures(item);
     });
 
     if (lastTimeout) {
@@ -66,10 +66,10 @@
     return parseInt(housingGuestsSelect.value, 10) === pin.offer.guests;
   };
 
-  var filterFeatures = function (it) {
+  var filterFeatures = function (item) {
     var checkedFeatures = housingFeatures.querySelectorAll('input:checked');
     return Array.from(checkedFeatures).every(function (element) {
-      return it.offer.features.includes(element.value);
+      return item.offer.features.includes(element.value);
     });
   };
 

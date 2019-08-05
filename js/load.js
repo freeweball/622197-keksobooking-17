@@ -1,7 +1,6 @@
 'use strict';
 
 (function () {
-
   var URL = 'https://js.dump.academy/keksobooking/data';
   var URL_UPLOAD = 'https://js.dump.academy/keksobooking';
 

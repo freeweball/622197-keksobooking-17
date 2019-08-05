@@ -1,6 +1,25 @@
 'use strict';
 
 (function () {
+  var ESC_KEYCODE = 27;
+  var MainPinData = {
+    WIDTH: 65,
+    HEIGHT: 65,
+    ARROW_HEIGHT: 18,
+    BLOCK: document.querySelector('.map__pin--main'),
+
+    getLocation: function () {
+      return {
+        X: this.BLOCK.offsetLeft,
+        Y: this.BLOCK.offsetTop
+      };
+    }
+  };
+  var AddressValue = {
+    INITIAL: (MainPinData.getLocation().X + MainPinData.WIDTH / 2) + ', ' +
+    (MainPinData.getLocation().Y + MainPinData.HEIGHT / 2),
+    NEW: 0
+  };
   var searchForm = document.querySelector('.ad-form').querySelectorAll('fieldset');
   var advertMap = document.querySelector('.map');
   var advertForm = document.querySelector('.ad-form');
@@ -10,6 +29,9 @@
   var formOptionGuest = advertForm.querySelector('#capacity');
   var form = document.querySelector('.ad-form');
   var pinItemMain = document.querySelector('.map__pin--main');
+  var resetButton = document.querySelector('.ad-form__reset');
+  var formFilter = document.querySelector('.map__filters');
+  var formAddres = document.querySelector('#address');
   var adCapacityMap = {
     '1': [1],
     '2': [1, 2],
@@ -82,6 +104,7 @@
     window.upload(new FormData(form), function () {});
     evt.preventDefault();
     form.reset();
+    formFilter.reset();
     if (window.popupFlag) {
       window.closePopup();
     }
@@ -100,11 +123,25 @@
   });
 
   document.addEventListener('keydown', function (evt) {
-    var ESC_KEYCODE = 27;
-
     if (evt.keyCode === ESC_KEYCODE) {
-      closeMessageSuccess();
+      if (document.querySelector('.success')) {
+        closeMessageSuccess();
+      }
     }
+  });
+
+  var onClickResetBooking = function () {
+
+    formFilter.reset();
+    form.reset();
+    pinItemMain.style.left = window.startCoordPinMain.x;
+    pinItemMain.style.top = window.startCoordPinMain.y;
+    formAddres.value = AddressValue.INITIAL;
+  };
+
+  resetButton.addEventListener('click', function (evt) {
+    evt.preventDefault();
+    onClickResetBooking();
   });
 
   window.form = {
