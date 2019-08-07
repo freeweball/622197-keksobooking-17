@@ -49,7 +49,7 @@
       if (pinTopPosition >= Y_MIN && pinTopPosition <= Y_MAX && pinLeftPosition >= X_MIN - PIN_SHIFT_X && pinLeftPosition <= X_MAX) {
         advertPin.style.top = pinTopPosition + 'px';
         advertPin.style.left = pinLeftPosition + 'px';
-        mapPinValue.value = pinLeftPosition + ', ' + pinTopPosition;
+        mapPinValue.value = (pinLeftPosition + PIN_WIDTH / 2 - shift.y) + ', ' + (pinTopPosition + PIN_WIDTH / 2 - shift.x);
       }
     };
 

@@ -44,6 +44,8 @@
     for (var i = 1; i < pinItem.length; i++) {
       pinList.removeChild(pinItem[i]);
     }
+
+    window.dragged = false;
   };
 
   var errorHandler = function () {
